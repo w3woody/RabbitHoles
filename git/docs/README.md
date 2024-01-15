@@ -32,3 +32,4 @@ The example code associated with this contains two object directories from two (
 
 The sample code shows how to parse each of the different types, and shows examples of reading each of the object types as well as examples of applying delta changes to an object.
 
+The code is intended for readability rather than for speed, though we do implement the binary search algorithm in our index file. There are a number of ways in which this could be improved, of course--but the whole point is to give a starting point to our basic object files, index files and pack file formats.
