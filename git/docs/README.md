@@ -33,3 +33,18 @@ The example code associated with this contains two object directories from two (
 The sample code shows how to parse each of the different types, and shows examples of reading each of the object types as well as examples of applying delta changes to an object.
 
 The code is intended for readability rather than for speed, though we do implement the binary search algorithm in our index file. There are a number of ways in which this could be improved, of course--but the whole point is to give a starting point to our basic object files, index files and pack file formats.
+
+----
+
+Our example code demonstrates the following:
+
+1. Starting with a `commit` SHA-1, dumps the contents of the commit header and dumps the directory tree structure of the source tree contained under this commit.
+2. Starting with a `tag` SHA-1, dumps the contents of a tag header and dumps the object (in this case, a commit) associated with the tag.
+3. Dumps several blobs as text files given their SHA-1 name
+4. Dumps the contents of a pack index file, including the type of the objects stored in that pack file
+5. Pulls and dumps a blob from the pack file
+6. Dumps the delta information associated with an OFS\_DELTA record. (Presumably the same would work with a REF\_DELTA record.)
+7. Applies the delta information and dumps the results.
+
+Hopefull this should give you a good idea how to perform certain operations, such as reconstructing the source directory from a commit (just recurse the tree, but build the directories that are named and dump the blob data objects as files), and give an idea of how a commit operation would work. (Essentially recurse down the current source tree, constructing the SHA-1 checksums of the resulting objects--and constructing a new commit tree. Note objects and directories that don't change will have the same SHA-1 checksum, so they don't need to be recreated.)
+
