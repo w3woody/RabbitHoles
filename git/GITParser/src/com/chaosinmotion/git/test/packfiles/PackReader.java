@@ -244,7 +244,7 @@ public class PackReader
 
 		if (header.type == ObjectType.OFSDelta) {
 			// The offset is given relative to the current object
-			long offset = header.headerPos - Stream.readSizeEncoded(file);
+			long offset = header.headerPos - Stream.readAltSizeEncoded(file);
 
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			decompressData(baos);

@@ -1,8 +1,6 @@
 package com.chaosinmotion.git.test.utils;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.RandomAccessFile;
+import java.io.*;
 
 public class Stream
 {
@@ -51,7 +49,7 @@ public class Stream
 	 * @return The integer read
 	 * @throws IOException
 	 */
-	public static long readSizeEncoded(RandomAccessFile is) throws IOException
+	public static long readAltSizeEncoded(RandomAccessFile is) throws IOException
 	{
 		long ret = 0;
 		int ch;
@@ -69,6 +67,97 @@ public class Stream
 		}
 
 		return ret;
+	}
+
+	/**
+	 * Fun question: how do we generate something that is readable by our
+	 * alternate size encoded integer string? This is the best I could come
+	 * up with: first, unspool the digits off the bottom, then write the
+	 * bytes back to front...
+	 *
+	 * @param value
+	 * @param result
+	 * @throws IOException
+	 */
+	public static void writeSizeEncoded(long value, OutputStream result) throws IOException
+	{
+		// a 64-bit value should require no more than 10 bytes, so alloc 12 to be safe
+		byte[] buffer = new byte[12];
+		byte pos;
+
+		/*
+		 *	Get the bytes off the bottom
+		 */
+
+		pos = 0;
+		buffer[pos++] = (byte)(0x7F & value);
+		value >>>= 7;			// assume unsigned value
+		while (value != 0) {
+			--value;			// subtract so the next byte encodes 1..256
+			buffer[pos++] = (byte)(0x7F & value);
+			value >>>= 7;
+		}
+
+		/*
+		 *	At this point our value is encoded in inverse order in the buffer.
+		 * 	First, set the MSB for all but the *first* byte (which is written
+		 * 	last)
+		 */
+
+		for (byte i = 1; i < pos; ++i) buffer[i] |= 0x80;
+
+		/*
+		 *	Next, reverse the order of our buffer
+		 */
+
+		byte i = 0, j = (byte)(pos-1);		// NOTE: pos is guaranteed to be >= 1
+		while (i < j) {
+			byte tmp = buffer[i];
+			buffer[i] = buffer[j];
+			buffer[j] = tmp;
+			++i;
+			--j;
+		}
+
+		/*
+		 *	Now write the results, which should be decodable by the
+		 * 	routine above.
+		 */
+
+		result.write(buffer, 0, pos);
+	}
+
+	/**
+	 * This tests our encoding process.
+	 * @throws IOException
+	 */
+	public static void testEncoding() throws IOException
+	{
+		long test = 123456L;
+
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		writeSizeEncoded(test,baos);
+		baos.close();
+
+		ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+
+		// Read
+		long ret = 0;
+		int ch;
+
+		/*
+		 *	Read the bytes and shift in the answer until we hit a byte
+		 * 	that has an MSB of 0.
+		 */
+
+		ch = bais.read();
+		ret = (ch & 0x7f);
+		while ((ch & 0x80) != 0) {
+			ch = bais.read();
+			ret = ((ret + 1) << 7) | (ch & 0x7f);
+		}
+
+		if (test != ret) throw new IOException("Encoding test failed");
 	}
 }
 

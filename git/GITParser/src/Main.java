@@ -8,6 +8,7 @@ import com.chaosinmotion.git.test.packfiles.IndexReader;
 import com.chaosinmotion.git.test.packfiles.PackReader;
 import com.chaosinmotion.git.test.utils.Hex;
 import com.chaosinmotion.git.test.utils.RandomAccessByteArray;
+import com.chaosinmotion.git.test.utils.Stream;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -593,6 +594,8 @@ public class Main
 	public static void main(String[] args)
 	{
 		try {
+//			Stream.testEncoding();
+
 			printHeader("Starting test group 1 with unpacked objects");
 
 			/*
