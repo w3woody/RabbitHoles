@@ -110,11 +110,15 @@ The OFS\_DELTA and the REF\_DELTA file formats both describe a set of 'delta' co
 
 The difference between an OFS\_DELTA delta and a REF\_DELTA object is *how* the source file is stored.
 
-An OFS\_DELTA identifies the source object by an index in the current pack file. So, for example, if the current file is based off of the file at index 4 of our pack file, the OFS\_DELTA would contain as the file identifier the number 4.
+An OFS\_DELTA identifies the source object by the file position in the current pack file. (Specifically, the integer gives the number of bytes *prior to the current header* to look for the header of the base object to decompress.)
 
 An REF\_DELTA identifies the source object by the 20-byte SHA1 object identifier of our file. While *in theory* this means that a pack file can refer to an object elsewhere in our system--and this can lead to a so-called 'skinny pack file' which only contains deltas and not the originals, *in practice* this is not done.
 
 (When sending pack files across to another GIT instance, it is an error for a delta to refer to contents contained outside the same pack file. This means *in practice* a REF\_DELTA is rarely seen 'in the wild.')
+
+In both cases, the delta data follows, compressed using zlib.
+
+**NOTE:** In both cases, the size given in the header is the size *of the decompressed data that follows our OFS\_DELTA byte offset, or our REF\_DELTA SHA-1 object identifier.*
 
 ### Delta header formats
 
@@ -207,7 +211,7 @@ The first copies a block of data from the source file (either specified by the S
 
 The second copies a block of bytes (from 1 to 127 bytes) directly from the delta record itself.
 
-When converting an origin file to a destination file, each of the delta commands are executed in sequence, from the start to the end. The data specified (either a segment from the origin file, or immediate data) is written out in sequence to the destination.
+When converting an origin file to a destination file, each of the delta commands below are executed in sequence, from the first to the last. The data specified (either a segment from the origin file, or immediate data) is written out in order to the destination.
 
 #### COPY Command
 
