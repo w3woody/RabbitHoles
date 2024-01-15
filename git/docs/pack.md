@@ -154,7 +154,7 @@ Sample code that can read this integer format in Java:
         return ret;
     }
 
-This value is then *sutracted* from the offset of the current header for the OFS\_DELTA object we're reading. This gives us the byte offset in our pack file of the base object used as the source file we're modifying. 
+This value is then *subtracted* from the offset of the current header for the OFS\_DELTA object we're reading. This gives us the byte offset in our pack file of the base object used as the source file we're modifying. 
 
 (Note: if the base file itself is a delta file, we continue until we find a base file. Observe that as we are constantly subtracting from the current file position we are guaranteed not to have any cyclic dependencies.)
 
