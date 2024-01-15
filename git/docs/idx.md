@@ -79,7 +79,9 @@ Offsets and SHA records are stored next to each other as 24-byte records in the 
 
 The SHA values representing each of these objects is the same as the SHA used for [bare object files:](objectnames.md): it's the SHA-1 checksum of the contents of the uncompressed file. 
 
-This is also true for [OFS\_DELTA and REF\_DELTA](pack.md) records: the SHA used is the SHA-1 checksum of the reconstructed file. This means we can freely compress any object in our pack file and reconstruct it later.
+This is also true for [OFS\_DELTA and REF\_DELTA](pack.md) records: the SHA used is the SHA-1 checksum of the reconstructed file. This means we can freely compress any object in our pack file by constructing a delta change list and reconstruct it later, without renaming the objects within our system. 
+
+Note that the type of the reconstructed file is the type of the base object being reconstructed. That is an OFS\_DELTA of the base type of a tree is also a tree itself.
 
 ### Checksum trailer
 
