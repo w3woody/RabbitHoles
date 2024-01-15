@@ -11,8 +11,18 @@ So this is what I found.
 ----
 
 - [GIT Objects](objects.md)
-    - [GIT Object Names](objectnames.md)
-    - [GIT Object Types](objecttypes.md)
-    - [GIT Object Storage](objectstorage.md)
-    - [GIT Tree Objects](trees.md)
+	- [GIT Object Names](objectnames.md)
+	- [GIT Object Types](objecttypes.md)
+	- [GIT Object Storage](objectstorage.md)
+	- [GIT Tree Objects](trees.md)
+	- [GIT Commit Objects](commits.md)
+	- [GIT Tag Objects](tags.md)
+	
+- [GIT Pack Files](packintro.md)
+    - [GIT Index File Format](idx.md)
+    - [GIT Pack File Format](pack.md)
+
+----
+
+Note that there are still some [open questions](questions.md) about what I've found so far, and I haven't put these pieces together yet into a more coherent whole. I also have yet to figure out the specifics of the GIT wire protocol.
 

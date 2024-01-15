@@ -8,7 +8,7 @@ And I'm sharing them here in the hope that perhaps they'll help someone else fig
 
 These are my own personal rabbit holes, complete with documentation as to what I found.
 
-## [GIT](x)
+## [GIT](git/docs/README.md)
 
 Out of an abundance of curiosity I wanted to know the contents of the .git/object files in a GIT repository. My goal with this rabbit hole--which is incomplete--was to build enough of the architecture of GIT from scratch so that I could clone a repository.
 
