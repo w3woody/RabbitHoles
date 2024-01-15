@@ -10,7 +10,7 @@ Our pack file begins with a 12 byte header.
 
 The first four bytes are the four characters 'PACK'.
 
-The next four bytes is the version of the pack file, in network byte order.
+The next four bytes is the version of the pack file, in network byte order. The version must be either 2 or 3; both appear to refer to the same file format, and modern GIT implementations appear to write 2 as the version number.
 
 The last four bytes is the number of objects that are packaged in this pack file.
 
@@ -122,7 +122,15 @@ The OFS\_DELTA data object has the following format:
 
 ![OFS header](ofs_header.png)
 
-The integer index is stored in a variable-sized offset format; the MSB set to 1 indicates there are more bytes to read.
+The integer index is stored in a variable-sized offset format; the MSB set to 1 indicates there are more bytes to read. As we shift the bytes to the left, we add 1 to each byte shifted; thus, the byte pattern
+
+    0x80 0x05
+
+actually encodes the result
+
+    0x0085
+
+That is, as the bit pattern 0x00 is shifted 7 bits to the left, we add 1.
 
 Sample code that can read this integer format in Java:
 
@@ -136,14 +144,19 @@ Sample code that can read this integer format in Java:
          *  that has an MSB of 0.
          */
 
-        for (;;) {
+        ch = is.read();
+        ret = (ch & 0x7f);
+        while ((ch & 0x80) != 0) {
             ch = is.read();
-
-            ret = (ret << 7) | (ch & 0x7f);
-            if ((ch & 0x80) == 0) break;
+            ret = ((ret + 1) << 7) | (ch & 0x7f);
         }
+
         return ret;
     }
+
+This value is then *sutracted* from the offset of the current header for the OFS\_DELTA object we're reading. This gives us the byte offset in our pack file of the base object used as the source file we're modifying. 
+
+(Note: if the base file itself is a delta file, we continue until we find a base file. Observe that as we are constantly subtracting from the current file position we are guaranteed not to have any cyclic dependencies.)
 
 The REF\_DELTA data object has the following format:
 
@@ -161,7 +174,7 @@ Decompressing the sizes uses a technique similar to how we stored the type and s
 
 *NOTE: The format in which these integers are stored is different than how the integer index is stored in the OFS\_DELTA header.*
 
-> And this is the point where my tearing out of my hair was fairly complete. **NOTE: I reserve the right to be wrong here.**
+> And this is the point where my tearing out of my hair was fairly complete.
 
 	public static long readSizeEncoded2(InputStream is) throws IOException
 	{

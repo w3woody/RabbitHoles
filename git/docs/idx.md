@@ -77,6 +77,10 @@ Fanout entires in our fanout table are stored as 4-byte integers in network orde
 
 Offsets and SHA records are stored next to each other as 24-byte records in the Offset/SHA table. SHA records are the names of the objects represented in this pack file, and the offsets are the offset *in bytes* into our pack file where the data is stored. Offsets are stored in network order as 4-byte integers, and the SHA records are stored as 20 byte records.
 
+The SHA values representing each of these objects is the same as the SHA used for [bare object files:](objectnames.md): it's the SHA-1 checksum of the contents of the uncompressed file. 
+
+This is also true for [OFS\_DELTA and REF\_DELTA](pack.md) records: the SHA used is the SHA-1 checksum of the reconstructed file. This means we can freely compress any object in our pack file and reconstruct it later.
+
 ### Checksum trailer
 
 The trailer of our file contains 2 20-byte SHA1 checksums.

@@ -26,3 +26,9 @@ So this is what I found.
 
 Note that there are still some [open questions](questions.md) about what I've found so far, and I haven't put these pieces together yet into a more coherent whole. I also have yet to figure out the specifics of the GIT wire protocol.
 
+----
+
+The example code associated with this contains two object directories from two (very small) GIT object directories. The first contains all naked objects; the second packs those objects aggressively into a pack file.
+
+The sample code shows how to parse each of the different types, and shows examples of reading each of the object types as well as examples of applying delta changes to an object.
+
