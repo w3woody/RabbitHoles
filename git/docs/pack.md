@@ -128,13 +128,13 @@ The OFS\_DELTA data object has the following format:
 
 The integer index is stored in a variable-sized offset format; the MSB set to 1 indicates there are more bytes to read. As we shift the bytes to the left, we add 1 to each byte shifted; thus, the byte pattern
 
-    0x80 0x05
+    0x82 0x05
 
 actually encodes the result
 
-    0x0085
+    0x0185  -- 0b0000 0000 0001 1000 0101
 
-That is, as the bit pattern 0x00 is shifted 7 bits to the left, we add 1.
+That is, as the bit pattern 0x02 is shifted 7 bits to the left, we add 1, giving 3. And 3 left-shifted 7 bits gives 0x180, to which we add the last byte 5.
 
 Sample code that can read this integer format in Java:
 
