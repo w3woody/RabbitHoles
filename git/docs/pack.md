@@ -254,4 +254,3 @@ That is, the first byte starts with the MSB of 0. The rest of the bits give the 
 #### Reserved command
 
 The first byte of `0x00` is interpreted not as a data block of size 0, but as a reserved command.
-
