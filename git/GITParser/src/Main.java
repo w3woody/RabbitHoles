@@ -6,6 +6,7 @@ import com.chaosinmotion.git.test.objects.TreeReader;
 import com.chaosinmotion.git.test.packfiles.Delta;
 import com.chaosinmotion.git.test.packfiles.IndexReader;
 import com.chaosinmotion.git.test.packfiles.PackReader;
+import com.chaosinmotion.git.test.protocol.TestProtocol;
 import com.chaosinmotion.git.test.utils.Hex;
 import com.chaosinmotion.git.test.utils.RandomAccessByteArray;
 import com.chaosinmotion.git.test.utils.Stream;
@@ -595,6 +596,7 @@ public class Main
 	{
 		try {
 //			Stream.testEncoding();
+			TestProtocol.test1();
 
 			printHeader("Starting test group 1 with unpacked objects");
 
