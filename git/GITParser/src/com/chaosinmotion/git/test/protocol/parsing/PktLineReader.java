@@ -72,7 +72,14 @@ public class PktLineReader
 		// Allocate and read a block
 		size -= 4;
 		byte[] data = new byte[size];
-		if (size != is.read(data)) throw new IOException("Short read");
+		int pos = 0;
+
+		while (pos < size) {
+			int rlen = size - pos;
+			rlen = is.read(data,pos,rlen);
+			if (rlen == -1) throw new IOException("Short read");
+			pos += rlen;
+		}
 
 		return new Return(PktLineType.LINE, data);
 	}

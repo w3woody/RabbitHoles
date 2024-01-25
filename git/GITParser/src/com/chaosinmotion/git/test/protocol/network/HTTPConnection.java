@@ -1,5 +1,7 @@
 package com.chaosinmotion.git.test.protocol.network;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -17,15 +19,30 @@ public class HTTPConnection
 {
 	private MutableURI baseURI;
 
+	/**
+	 * Wrapper for the HTTP response. Includes the result code and a pointer
+	 * to the input stream to read the results.
+	 */
 	public static class Response
 	{
 		public final int code;
-		public final byte[] data;
+		public final InputStream data;
 
-		private Response(int code, byte[] data)
+		private Response(int code, InputStream data)
 		{
 			this.code = code;
 			this.data = data;
+		}
+
+		public byte[] getAllData() throws IOException
+		{
+			if (data != null) return data.readAllBytes();
+			return null;
+		}
+
+		public boolean isSuccessful()
+		{
+			return isSuccessCode(code);
 		}
 	}
 
@@ -37,6 +54,11 @@ public class HTTPConnection
 	public HTTPConnection(String uri) throws URISyntaxException
 	{
 		baseURI = new MutableURI(uri);
+	}
+
+	private static boolean isSuccessCode(int code)
+	{
+		return ((code >= 200) && (code < 300));
 	}
 
 	public void get(String path, HashMap<String,String> params, Callback callback)
@@ -59,15 +81,14 @@ public class HTTPConnection
 				conn.setRequestMethod("GET");
 				conn.setRequestProperty("Git-Protocol","version=2");
 
-
 				conn.connect();
 
 				int responseCode = conn.getResponseCode();
-				byte[] data = null;
-				if (responseCode == 200) {
-					data = conn.getInputStream().readAllBytes();
+				InputStream data;
+				if (isSuccessCode(responseCode)) {
+					data = conn.getInputStream();
 				} else {
-					data = conn.getErrorStream().readAllBytes();
+					data = conn.getErrorStream();
 				}
 
 				Response response = new Response(responseCode,data);

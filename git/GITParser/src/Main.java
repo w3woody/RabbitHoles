@@ -598,78 +598,78 @@ public class Main
 //			Stream.testEncoding();
 			TestProtocol.test1();
 
-			printHeader("Starting test group 1 with unpacked objects");
-
-			/*
-			 *	Dump all the objects within our test1 directory. Our test1
-			 * 	directory is an example of a GIT repository without any packed
-			 */
-			System.out.println("Dump all object headers");
-			dumpAllHeaders();
-
-			/*
-			 *	Our GIT example contains two commits. The first commit has the
-			 *  SHA-1 hash of 073f88d50901c9aa8a9a75df4f7b05145e6cf546
-			 * 	The second 71b71187fe2ac3088cb90096206a12f1601ae981
-			 *
-			 * 	This reads the files out of the first test directory, where the
-			 * 	objects are stored as bare object files rather than in a pack
-			 * 	directory.
-			 */
-
-			System.out.println();
-			System.out.println("Starting Test 1");
-			test1("073f88d50901c9aa8a9a75df4f7b05145e6cf546");
-			test1("71b71187fe2ac3088cb90096206a12f1601ae981");
-
-			/*
-			 *	This does the same thing but with a tag. Our tag identifies
-			 *  the first commit.
-			 */
-
-			System.out.println();
-			System.out.println("Starting Test 2");
-			test2("db68cde733462c0818c271653332906164881bc1");
-
-			/*
-			 *	This dumps a couple of blobs.
-			 */
-
-			System.out.println("Starting Test 3");
-			System.out.println("Blob for README.md");
-			test3("e4c018ddf45cc7bed5f598c48c6668ed88745a2b");
-			System.out.println("Blob for .gitignore");
-			test3("f35faf4a85c3ba1e722404f1309f5de4f78b0e76");
-			System.out.println("Blob for main.c (version 1)");
-			test3("bfb1b107bab520e424acf46c3dbfec7e2dd043f1");
-
-			/*
-			 *	Test 2 with our index files
-			 */
-			System.out.println();
-			System.out.println();
-			printHeader("Starting test group 2 with packed objects");
-
-			System.out.println("Dump all index file objects");
-			File indexFile = new File("test/Test2/objects/pack/pack-9f3aff5a53ee278cbbf7900ae45eb601d53374d6.idx");
-			dumpIndex(indexFile);
-
-			/*
-			 *	Dump a blob from our pack file.
-			 */
-
-			System.out.println("Blob for README.md");
-			test4(indexFile, "e4c018ddf45cc7bed5f598c48c6668ed88745a2b");
-			System.out.println("Blob for .gitignore");
-			test4(indexFile, "f35faf4a85c3ba1e722404f1309f5de4f78b0e76");
-
-			/*
-			 *	Now resolve the data stored as a delta data.
-			 */
-
-			test5(indexFile,"bfb1b107bab520e424acf46c3dbfec7e2dd043f1");
-			System.out.println();
-			test6(indexFile,"bfb1b107bab520e424acf46c3dbfec7e2dd043f1");
+//			printHeader("Starting test group 1 with unpacked objects");
+//
+//			/*
+//			 *	Dump all the objects within our test1 directory. Our test1
+//			 * 	directory is an example of a GIT repository without any packed
+//			 */
+//			System.out.println("Dump all object headers");
+//			dumpAllHeaders();
+//
+//			/*
+//			 *	Our GIT example contains two commits. The first commit has the
+//			 *  SHA-1 hash of 073f88d50901c9aa8a9a75df4f7b05145e6cf546
+//			 * 	The second 71b71187fe2ac3088cb90096206a12f1601ae981
+//			 *
+//			 * 	This reads the files out of the first test directory, where the
+//			 * 	objects are stored as bare object files rather than in a pack
+//			 * 	directory.
+//			 */
+//
+//			System.out.println();
+//			System.out.println("Starting Test 1");
+//			test1("073f88d50901c9aa8a9a75df4f7b05145e6cf546");
+//			test1("71b71187fe2ac3088cb90096206a12f1601ae981");
+//
+//			/*
+//			 *	This does the same thing but with a tag. Our tag identifies
+//			 *  the first commit.
+//			 */
+//
+//			System.out.println();
+//			System.out.println("Starting Test 2");
+//			test2("db68cde733462c0818c271653332906164881bc1");
+//
+//			/*
+//			 *	This dumps a couple of blobs.
+//			 */
+//
+//			System.out.println("Starting Test 3");
+//			System.out.println("Blob for README.md");
+//			test3("e4c018ddf45cc7bed5f598c48c6668ed88745a2b");
+//			System.out.println("Blob for .gitignore");
+//			test3("f35faf4a85c3ba1e722404f1309f5de4f78b0e76");
+//			System.out.println("Blob for main.c (version 1)");
+//			test3("bfb1b107bab520e424acf46c3dbfec7e2dd043f1");
+//
+//			/*
+//			 *	Test 2 with our index files
+//			 */
+//			System.out.println();
+//			System.out.println();
+//			printHeader("Starting test group 2 with packed objects");
+//
+//			System.out.println("Dump all index file objects");
+//			File indexFile = new File("test/Test2/objects/pack/pack-9f3aff5a53ee278cbbf7900ae45eb601d53374d6.idx");
+//			dumpIndex(indexFile);
+//
+//			/*
+//			 *	Dump a blob from our pack file.
+//			 */
+//
+//			System.out.println("Blob for README.md");
+//			test4(indexFile, "e4c018ddf45cc7bed5f598c48c6668ed88745a2b");
+//			System.out.println("Blob for .gitignore");
+//			test4(indexFile, "f35faf4a85c3ba1e722404f1309f5de4f78b0e76");
+//
+//			/*
+//			 *	Now resolve the data stored as a delta data.
+//			 */
+//
+//			test5(indexFile,"bfb1b107bab520e424acf46c3dbfec7e2dd043f1");
+//			System.out.println();
+//			test6(indexFile,"bfb1b107bab520e424acf46c3dbfec7e2dd043f1");
 		}
 		catch (Throwable err)
 		{
