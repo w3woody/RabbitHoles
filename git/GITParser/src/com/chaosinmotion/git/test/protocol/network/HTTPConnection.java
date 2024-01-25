@@ -57,6 +57,9 @@ public class HTTPConnection
 				URL url = new URL(uri.toString());
 				HttpURLConnection conn = (HttpURLConnection)url.openConnection();
 				conn.setRequestMethod("GET");
+				conn.setRequestProperty("Git-Protocol","version=2");
+
+
 				conn.connect();
 
 				int responseCode = conn.getResponseCode();
