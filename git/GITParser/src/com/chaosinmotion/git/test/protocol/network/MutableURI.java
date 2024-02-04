@@ -1,5 +1,7 @@
 package com.chaosinmotion.git.test.protocol.network;
 
+import com.chaosinmotion.git.test.utils.Pair;
+
 import java.io.ByteArrayOutputStream;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
@@ -693,15 +695,18 @@ public class MutableURI
 	 */
 	public void setQuery(String key, String value)
 	{
-		Iterator<Pair<String,String>> iter = query.iterator();
-		while (iter.hasNext()) {
-			Pair<String,String> p = iter.next();
+		Pair<String,String> updated = new Pair<>(key,value);
+
+		int i,len = query.size();
+		for (i = 0; i < len; ++i) {
+			Pair<String,String> p = query.get(i);
 			if (p.first.contentEquals(key)) {
-				p.second = value;
+				// Replace in the same spot in the array
+				query.set(i,updated);
 				return;
 			}
 		}
-		query.add(new Pair<>(key,value));
+		query.add(updated);
 	}
 
 	/**

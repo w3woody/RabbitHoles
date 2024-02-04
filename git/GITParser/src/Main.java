@@ -596,7 +596,8 @@ public class Main
 	{
 		try {
 //			Stream.testEncoding();
-			TestProtocol.test1();
+//			TestProtocol.test1();
+			TestProtocol.test2();
 
 //			printHeader("Starting test group 1 with unpacked objects");
 //

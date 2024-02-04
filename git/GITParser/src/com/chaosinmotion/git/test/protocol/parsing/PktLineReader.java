@@ -83,5 +83,14 @@ public class PktLineReader
 
 		return new Return(PktLineType.LINE, data);
 	}
+
+	/**
+	 * Close the reader
+	 * @throws IOException
+	 */
+	public void close() throws IOException
+	{
+		if (is != null) is.close();
+	}
 }
 
